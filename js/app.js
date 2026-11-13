@@ -154,10 +154,7 @@ function init() {
     el.addEventListener('click', () => go(el));
     el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(el); } });
   });
-  const lm = $('.landmark');
-  const egg = () => toast('📡 Vibe 塔：今天的灵感信号满格，去做点什么吧！');
-  lm.addEventListener('click', egg);
-  lm.addEventListener('keydown', e => { if (e.key === 'Enter') egg(); });
+  // Vibe 塔（灵感扭蛋机）、彩蛋、散步小人等小玩意在 js/fun.js
 
   // 图片大图查看
   const lb = $('#lightbox');

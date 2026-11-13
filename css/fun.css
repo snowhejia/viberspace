@@ -1,0 +1,202 @@
+/* ============================================================
+   地图小玩意的样式（逻辑在 js/fun.js）
+   ============================================================ */
+
+/* ---------- 夜景 ---------- */
+.night-shade { pointer-events: none; }
+.night-shade rect { fill: #16213F; opacity: 0; transition: opacity .9s; }
+#map.night .night-shade rect { opacity: .64; }
+.sky { opacity: 0; pointer-events: none; transition: opacity .9s; }
+#map.night .sky { opacity: 1; }
+.stars circle { fill: #fff; animation: twinkle 2.6s ease-in-out infinite alternate; }
+@keyframes twinkle { from { opacity: .25; } to { opacity: 1; } }
+.beacon { fill: #FF5A4E; animation: blink 1.4s steps(1) infinite; }
+@keyframes blink { 50% { opacity: .15; } }
+.moon { outline: none; transform-box: fill-box; transform-origin: center; }
+#map.night .moon { pointer-events: auto; cursor: pointer; }
+.moon > circle:nth-child(2) { filter: drop-shadow(0 0 14px rgba(255, 243, 196, .9)); }
+.moon.grab { animation: grab .9s cubic-bezier(.3, 1.5, .5, 1); }
+@keyframes grab { 40% { transform: translateY(26px) scale(.8); } }
+
+#map .bld [fill], #map .ttl, #map .lbl-t, #map .lbl-en, #map .lbl-s { transition: fill .9s; }
+#map.night .ttl, #map.night .lbl-t, #map.night .lbl-en { fill: #fff; }
+#map.night .title .hand { fill: var(--yellow); }
+#map.night .stop .lbl-s { fill: #C9D4E8; }
+#map.night .route { stroke: var(--yellow); }
+#map.night .bld [fill="#CFE3F7"], #map.night .bld [fill="#FDE6EC"] { fill: #FFE7A0; }
+#map.night .door-glow { opacity: .55; }
+
+/* ---------- 灵感扭蛋机：Vibe 塔发信号 ---------- */
+.landmark .signal circle { fill: none; stroke: var(--blue); stroke-width: 4; opacity: 0; transform-box: fill-box; transform-origin: center; }
+#map.night .landmark .signal circle { stroke: var(--yellow); }
+.landmark.beam .signal circle { animation: ring .9s ease-out both; }
+@keyframes ring { from { opacity: 1; transform: scale(.3); } to { opacity: 0; transform: scale(3.4); } }
+.landmark:hover > rect, .landmark:focus-visible > rect { filter: brightness(1.08); }
+
+/* ---------- 吉祥物 ---------- */
+#map .mascot { cursor: pointer; outline: none; }
+#map .mascot.hop { animation: hop .55s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes hop {
+  30% { transform: translateY(-34px) scale(.94, 1.08); }
+  62% { transform: translateY(0) scale(1.12, .88); }
+}
+#map .mascot.spin { animation: spinout 1s ease-in-out; }
+@keyframes spinout { 50% { transform: rotate(360deg) scale(1.35); } to { transform: rotate(720deg); } }
+.say { opacity: 0; pointer-events: none; transition: opacity .25s; }
+.say.show { opacity: 1; }
+
+/* ---------- 纸船 + 鱼 ---------- */
+.boat { cursor: pointer; }
+.boat-in { transform-box: fill-box; transform-origin: bottom center; }
+.boat.tip .boat-in { animation: tipboat .8s ease-in-out; }
+@keyframes tipboat { 25% { transform: rotate(-18deg); } 60% { transform: rotate(12deg); } }
+.fish { visibility: hidden; cursor: pointer; }
+.fish.jump { visibility: visible; }
+.fish-body { transform-box: fill-box; transform-origin: center; }
+.fish.jump .fish-body { animation: fishjump 2s ease-in-out both; }
+@keyframes fishjump {
+  0%   { transform: translate(-34px, 14px) rotate(-60deg); opacity: 0; }
+  10%  { opacity: 1; }
+  45%  { transform: translate(-4px, -78px) rotate(-8deg); }
+  58%  { transform: translate(6px, -80px) rotate(12deg); }
+  90%  { opacity: 1; }
+  100% { transform: translate(34px, 14px) rotate(70deg); opacity: 0; }
+}
+.fish-splash { fill: none; stroke: #fff; stroke-width: 3; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.fish.jump .fish-splash { animation: splash 2s ease-out both; }
+@keyframes splash {
+  0% { opacity: .95; transform: scale(.3); } 22% { opacity: 0; transform: scale(1.3); }
+  86% { opacity: 0; transform: scale(.3); } 90% { opacity: .95; } 100% { opacity: 0; transform: scale(1.4); }
+}
+
+/* ---------- 散步小人 ---------- */
+.walker { display: none; pointer-events: none; }
+.walker.on { display: inline; }
+#map.cam .walker { opacity: 0; }
+.walker.pop .w-fig { animation: wpop .45s cubic-bezier(.3, 1.7, .5, 1); }
+@keyframes wpop { from { transform: translateY(-60px) scale(.3); opacity: 0; } }
+.w-shadow { fill: #000; opacity: .2; }
+.w-leg { transform-box: fill-box; transform-origin: top center; }
+.walker.moving .w-leg-l { animation: leg .3s ease-in-out infinite alternate; }
+.walker.moving .w-leg-r { animation: leg .3s ease-in-out infinite alternate-reverse; }
+@keyframes leg { from { transform: rotate(-28deg); } to { transform: rotate(28deg); } }
+.walker.moving .w-head { animation: wbob .3s ease-in-out infinite alternate; }
+@keyframes wbob { to { transform: translateY(-3px); } }
+.w-water { display: none; }
+.w-water ellipse { fill: rgba(255, 255, 255, .25); stroke: #fff; stroke-width: 3; }
+.w-water ellipse + ellipse { fill: none; opacity: .5; animation: wave 1.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes wave { from { transform: scale(.7); opacity: .8; } to { transform: scale(1.3); opacity: 0; } }
+.walker.swim .w-water { display: inline; }
+.walker.swim .w-body, .walker.swim .w-shadow { display: none; }
+.walker.swim .w-head { transform: translateY(32px); animation: none; }
+.w-tip text { font-family: "Noto Sans SC", sans-serif; font-weight: 700; }
+
+/* ---------- 派对模式（秘籍） ---------- */
+#map.party .stop .bld { transform-box: fill-box; transform-origin: bottom center; animation: dance .4s ease-in-out infinite alternate; }
+#map.party .stop:nth-child(odd) .bld { animation-direction: alternate-reverse; }
+#map.party .mascot { animation: spinout 1s ease-in-out infinite; }
+@keyframes dance { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-16px) rotate(3deg); } }
+
+/* ---------- 右下角工具栏 ---------- */
+#mapView { position: relative; }
+.map-hud { position: fixed; right: 16px; bottom: 16px; z-index: 14; display: flex; gap: 8px; }
+.map-hud button {
+  font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; color: var(--ink); background: #fff;
+  border: 2px solid var(--ink); border-radius: 999px; padding: 6px 14px; box-shadow: 0 3px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s, background .2s; white-space: nowrap;
+}
+.map-hud button:hover { transform: translateY(-2px); box-shadow: 0 5px 0 var(--ink); }
+.map-hud button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+.map-hud button[aria-pressed="true"], .map-hud button[aria-expanded="true"] { background: var(--yellow); }
+.map-hud button.pulse { animation: pulse .6s cubic-bezier(.3, 1.8, .5, 1); }
+@keyframes pulse { 40% { transform: scale(1.25); background: var(--yellow); } }
+
+.egg-panel {
+  position: fixed; right: 16px; bottom: 66px; z-index: 14; width: min(330px, calc(100vw - 32px));
+  background: #fff; border: 2px solid var(--ink); border-radius: 18px; box-shadow: 0 5px 0 var(--ink); padding: 14px 16px;
+}
+.egg-panel header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.egg-panel header span { font-family: "Rubik", sans-serif; font-weight: 900; color: var(--blue); }
+.egg-panel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.egg-panel li { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; background: #F4F7FA; }
+.egg-panel li.got { background: #FFFAD1; }
+.egg-panel .ei { font-size: 22px; width: 30px; text-align: center; flex: none; }
+.egg-panel b { display: block; font-size: 15px; }
+.egg-panel small { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.egg-panel footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; }
+
+/* ---------- 弹窗 ---------- */
+.fun-modal { position: fixed; inset: 0; z-index: 55; background: rgba(20, 26, 33, .6); display: grid; place-items: center; padding: 16px; }
+.fun-card {
+  position: relative; width: min(440px, 100%); max-height: calc(100vh - 32px); overflow: auto; text-align: center;
+  background: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 0 8px 0 var(--ink); padding: 26px 22px 22px;
+  animation: cardIn .4s cubic-bezier(.3, 1.5, .5, 1);
+}
+@keyframes cardIn { from { transform: translateY(30px) scale(.92); opacity: 0; } }
+.fun-x { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: #F1F4F8; color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; }
+.fun-x:hover { background: #E3E7EC; }
+.fun-k { margin: 0 0 4px; font-size: 14px; font-weight: 700; color: var(--blue); }
+.fun-card h3 { margin: 0; font-size: 22px; line-height: 1.3; }
+.fun-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.fun-btns .btn { padding: 10px 20px; font-size: 15px; }
+.link-btn { background: none; border: 0; padding: 0; font: inherit; font-size: 13px; color: var(--blue); text-decoration: underline; cursor: pointer; }
+
+/* 扭蛋 */
+.capsule-stage { height: 190px; display: grid; place-items: center; }
+.capsule { --cap: var(--pink); position: relative; width: 112px; height: 112px; filter: drop-shadow(0 6px 0 rgba(38, 48, 59, .18)); }
+.capsule i { position: absolute; left: 0; right: 0; height: 50%; border: 3px solid var(--ink); transition: transform .35s cubic-bezier(.5, 0, .3, 1), opacity .35s; }
+.cap-top { top: 0; background: var(--cap); border-radius: 56px 56px 0 0; border-bottom-width: 1.5px !important; }
+.cap-top::after { content: ""; position: absolute; left: 22%; top: 22%; width: 22%; height: 26%; border-radius: 50%; background: rgba(255, 255, 255, .55); }
+.cap-bot { bottom: 0; background: #fff; border-radius: 0 0 56px 56px; border-top-width: 1.5px !important; }
+.capsule.gold { filter: drop-shadow(0 0 16px #FFD400); }
+.capsule.gold .cap-top { background: linear-gradient(135deg, #FFF3A0, #FFD400 45%, #F0A800); }
+.capsule.drop { animation: capdrop 1.15s ease-out both; }
+@keyframes capdrop {
+  0% { transform: translateY(-170px) rotate(-40deg); }
+  40% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-26px); } 60% { transform: translateY(0); }
+  72% { transform: rotate(-12deg); } 84% { transform: rotate(10deg); } 100% { transform: rotate(0); }
+}
+.capsule.pop .cap-top { transform: translateY(-46px) rotate(-28deg); opacity: 0; }
+.capsule.pop .cap-bot { transform: translateY(34px) rotate(16deg); opacity: 0; }
+
+.idea { text-align: left; margin-top: 14px; }
+.idea.in { animation: cardIn .4s cubic-bezier(.3, 1.5, .5, 1); }
+.idea-rare { display: inline-block; margin-bottom: 10px; padding: 2px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; background: linear-gradient(90deg, #FFF3A0, #FFD400); }
+.idea-head { display: flex; gap: 14px; align-items: center; }
+.idea-emoji { font-size: 34px; width: 60px; height: 60px; flex: none; display: grid; place-items: center; border-radius: 16px; background: #EAF2FC; }
+.idea.rare .idea-emoji { background: #FFF3A0; }
+.idea-lv { font-size: 13px; color: var(--muted); }
+.idea-pitch { margin: 14px 0 10px; }
+.idea-tools { display: flex; flex-wrap: wrap; gap: 6px; }
+.idea-tools span { font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: #F1F4F8; }
+.idea-prompt { margin-top: 14px; padding: 12px 14px; border-radius: 14px; border: 2px dashed #E6D9AE; background: var(--cream); }
+.idea-prompt span { font-size: 12px; font-weight: 700; color: #A88A2A; }
+.idea-prompt p { margin: 4px 0 6px; font-size: 15px; }
+
+/* 徽章 */
+.badge-svg { width: 176px; height: 176px; display: block; margin: 0 auto 10px; animation: badgeIn .9s cubic-bezier(.3, 1.4, .5, 1); }
+@keyframes badgeIn { from { transform: rotate(-200deg) scale(.2); opacity: 0; } }
+.badge-date { font-size: 13px; margin: 0; }
+
+/* 彩纸 */
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 70; overflow: hidden; }
+.confetti i { position: absolute; top: -20px; width: 9px; height: 14px; border-radius: 2px; animation-name: fall; animation-timing-function: cubic-bezier(.3, .6, .6, 1); animation-fill-mode: both; }
+@keyframes fall { to { transform: translate(var(--x), 110vh) rotate(var(--r)); } }
+
+@media (max-width: 720px) {
+  .map-hud { right: 12px; bottom: 12px; gap: 6px; }
+  .map-hud button { font-size: 13px; padding: 6px 11px; }
+  .egg-panel { right: 12px; bottom: 60px; }
+  body:has(#mapView:not([hidden])) .toast { bottom: 70px; }   /* 别挡住右下角的工具栏 */
+}
+
+/* ---------- 自行车：点了才骑 ---------- */
+#map .bike { cursor: pointer; outline: none; }
+#map .bike:hover circle, #map .bike:focus-visible circle { stroke: var(--blue); }
+.spokes { transform-box: fill-box; transform-origin: center; }
+.bike.riding .spokes { animation: spokes .3s linear infinite; }
+@keyframes spokes { to { transform: rotate(360deg); } }
+.float-txt { font-family: "ZCOOL KuaiLe", sans-serif; font-size: 24px; fill: var(--blue); pointer-events: none; animation: floatUp 1.3s ease-out both; }
+#map.night .float-txt { fill: var(--yellow); }
+@keyframes floatUp { from { opacity: 0; transform: translateY(10px); } 15% { opacity: 1; } to { opacity: 0; transform: translateY(-36px); } }
